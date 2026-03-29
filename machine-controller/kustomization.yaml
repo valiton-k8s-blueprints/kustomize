@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - https://raw.githubusercontent.com/kubermatic/machine-controller/refs/tags/v1.65.0/examples/machine-controller.yaml
+  - cloud-provider-secret.yaml
 
 images:
   - name: quay.io/kubermatic/machine-controller
