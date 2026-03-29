@@ -25,8 +25,8 @@ patches:
                   - -listen-address=0.0.0.0:9876
                   - -namespace=kube-system
                   - -node-external-cloud-provider
-                  - -tls-cert-path=/tmp/cert/cert.pem
-                  - -tls-key-path=/tmp/cert/key.pem
+                  - -tls-cert-path=/tmp/cert/tls.crt
+                  - -tls-key-path=/tmp/cert/tls.key
                 command:
                   - /usr/local/bin/webhook
   - patch: |-
