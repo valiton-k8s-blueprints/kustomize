@@ -22,8 +22,6 @@ patches:
             containers:
               - name: webhook
                 args:
-                  - -log-debug
-                  - -log-format=console
                   - -listen-address=0.0.0.0:9876
                   - -namespace=kube-system
                   - -node-external-cloud-provider
@@ -43,6 +41,8 @@ patches:
             containers:
               - name: machine-controller
                 args:
+                  - -log-debug
+                  - -log-format=console
                   - -health-probe-address=0.0.0.0:8085
                   - -metrics-address=0.0.0.0:8080
                   - -node-csr-approver
