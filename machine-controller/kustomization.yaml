@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - https://raw.githubusercontent.com/uwej711/machine-controller/refs/heads/feature/kube-config-in-cluster/examples/machine-controller.yaml
+  - https://raw.githubusercontent.com/kubermatic/machine-controller/refs/tags/v1.65.0/examples/machine-controller.yaml
   - cloud-provider-secret.yaml
 
 images:
@@ -41,8 +41,6 @@ patches:
             containers:
               - name: machine-controller
                 args:
-                  - -log-debug
-                  - -log-format=console
                   - -health-probe-address=0.0.0.0:8085
                   - -metrics-address=0.0.0.0:8080
                   - -node-csr-approver
@@ -61,3 +59,20 @@ patches:
                       secretKeyRef:
                         name: cloud-provider-secret
                         key: application_credential_secret
+  - patch: |-
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      metadata:
+        name: machine-controller
+        namespace: default
+        labels:
+          local-testing: "true"
+      rules:
+        - apiGroups:
+            - discovery.k8s.io
+          resources:
+            - endpointslices
+          verbs:
+            - get
+            - watch
+            - list
