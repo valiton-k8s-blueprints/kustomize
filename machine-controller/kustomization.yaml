@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - https://raw.githubusercontent.com/kubermatic/machine-controller/refs/tags/v1.65.0/examples/machine-controller.yaml
+  - https://raw.githubusercontent.com/uwej711/machine-controller/refs/heads/feature/kube-config-in-cluster/examples/machine-controller.yaml
   - cloud-provider-secret.yaml
 
 images:
