@@ -29,6 +29,17 @@ patches:
                   - -tls-key-path=/tmp/cert/tls.key
                 command:
                   - /usr/local/bin/webhook
+                env:
+                  - name: OS_APPLICATION_CREDENTIAL_ID
+                    valueFrom:
+                      secretKeyRef:
+                        name: cloud-provider-secret
+                        key: application_credential_id
+                  - name: OS_APPLICATION_CREDENTIAL_SECRET
+                    valueFrom:
+                      secretKeyRef:
+                        name: cloud-provider-secret
+                        key: application_credential_secret
   - patch: |-
       apiVersion: apps/v1
       kind: Deployment
