@@ -14,21 +14,22 @@ patches:
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: machine-controller-webhook
+        name: machine-controller
         namespace: kube-system
       spec:
         template:
           spec:
             containers:
-              - name: webhook
+              - name: machine-controller
                 args:
-                  - -listen-address=0.0.0.0:9876
-                  - -namespace=kube-system
+                  - -log-debug
+                  - -health-probe-address=0.0.0.0:8085
+                  - -metrics-address=0.0.0.0:8080
+                  - -node-csr-approver
                   - -node-external-cloud-provider
-                  - -tls-cert-path=/tmp/cert/tls.crt
-                  - -tls-key-path=/tmp/cert/tls.key
+                  - -join-cluster-timeout=15m
                 command:
-                  - /usr/local/bin/webhook
+                  - /usr/local/bin/machine-controller
                 env:
                   - name: OS_APPLICATION_CREDENTIAL_ID
                     valueFrom:
@@ -44,21 +45,21 @@ patches:
       apiVersion: apps/v1
       kind: Deployment
       metadata:
-        name: machine-controller
+        name: machine-controller-webhook
         namespace: kube-system
       spec:
         template:
           spec:
             containers:
-              - name: machine-controller
+              - name: webhook
                 args:
-                  - -health-probe-address=0.0.0.0:8085
-                  - -metrics-address=0.0.0.0:8080
-                  - -node-csr-approver
+                  - -listen-address=0.0.0.0:9876
+                  - -namespace=kube-system
                   - -node-external-cloud-provider
-                  - -join-cluster-timeout=15m
+                  - -tls-cert-path=/tmp/cert/tls.crt
+                  - -tls-key-path=/tmp/cert/tls.key
                 command:
-                  - /usr/local/bin/machine-controller
+                  - /usr/local/bin/webhook
                 env:
                   - name: OS_APPLICATION_CREDENTIAL_ID
                     valueFrom:
