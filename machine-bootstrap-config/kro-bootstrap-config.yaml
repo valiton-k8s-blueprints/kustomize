@@ -2,26 +2,30 @@ apiVersion: kro.run/v1alpha1
 kind: ResourceGraphDefinition
 metadata:
   name: bootstrap-config-resource
+  annotations:
+    kro.run/allow-breaking-changes: "true"
 spec:
   schema:
     apiVersion: v1alpha1
     kind: BootstrapConfig
     spec:
-      name: string
+      machineDeployment:
+        name: string
+        namespace: string
   resources:
     - id: machineDeployment
       externalRef:
         apiVersion: cluster.k8s.io/v1alpha1
         kind: MachineDeployment
         metadata:
-          name: "${schema.spec.name}"
-          namespace: "kube-system"
+          name: "${schema.spec.machineDeployment.name}"
+          namespace: "${schema.spec.machineDeployment.namespace}"
     - id: externalSecret
       template:
         apiVersion: external-secrets.io/v1
         kind: ExternalSecret
         metadata:
-          name: "${schema.spec.name}-bootstrap-config"
+          name: "${schema.spec.machineDeployment.name}-{schema.spec.machineDeployment.namespace}-bootstrap-config"
           namespace: cloud-init-settings
         spec:
           refreshInterval: 30m
