@@ -36,7 +36,7 @@ spec:
             template:
               metadata:
                 annotations:
-                  k8c.io/machine-deployment-revision: "${machineDeployment.metadata.annotations['k8c.io/machine-deployment-revision']}"
+                  k8c.io/machine-deployment-revision: "${machineDeployment.metadata.annotations['machinedeployment.clusters.k8s.io/revision']}"
               engineVersion: v2
               data:
                 cloud-config: |-
