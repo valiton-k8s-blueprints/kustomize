@@ -1,0 +1,44 @@
+apiVersion: kro.run/v1alpha1
+kind: ResourceGraphDefinition
+metadata:
+  name: bootstrap-config-resource
+spec:
+  schema:
+    apiVersion: v1alpha1
+    kind: BootstrapConfig
+    spec:
+      name: string
+  resources:
+    - id: machineDeployment
+      externalRef:
+        apiVersion: cluster.k8s.io/v1alpha1
+        kind: MachineDeployment
+        metadata:
+          name: "${schema.spec.name}"
+          namespace: "kube-system"
+    - id: externalSecret
+      template:
+        apiVersion: external-secrets.io/v1
+        kind: ExternalSecret
+        metadata:
+          name: "${schema.spec.name}-bootstrap-config"
+          namespace: cloud-init-settings
+        spec:
+          refreshInterval: 30m
+          secretStoreRef:
+            kind: ClusterSecretStore
+            name: cluster-secrets
+          target:
+            template:
+              metadata:
+                annotations:
+                  k8c.io/machine-deployment-revision: "${machineDeployment.metadata.annotations['k8c.io/machine-deployment-revision']}"
+              engineVersion: v2
+              data:
+                cloud-config: |-
+                  {{ .cloudInit }}
+          data:
+            - secretKey: cloudInit
+              remoteRef:
+                key: cluster-secrets
+                property: dynamic_worker_cloud_init
