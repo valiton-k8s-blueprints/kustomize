@@ -12,6 +12,14 @@ rules:
     verbs:
       - "*"
   - apiGroups:
+      - kro.run
+    resources:
+      - bootstrapconfigs/status
+    verbs:
+      - get
+      - patch
+      - update
+  - apiGroups:
       - cluster.k8s.io
     resources:
       - machinedeployments
