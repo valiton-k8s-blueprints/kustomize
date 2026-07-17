@@ -25,7 +25,7 @@ spec:
         apiVersion: external-secrets.io/v1
         kind: ExternalSecret
         metadata:
-          name: "${schema.spec.machineDeployment.name}-{schema.spec.machineDeployment.namespace}-bootstrap-config"
+          name: "${schema.spec.machineDeployment.name}-${schema.spec.machineDeployment.namespace}-bootstrap-config"
           namespace: cloud-init-settings
         spec:
           refreshInterval: 30m
